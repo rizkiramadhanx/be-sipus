@@ -1,9 +1,12 @@
 import express, { Express, Request, Response, json } from 'express';
-import { ErrorMessage } from './utils';
+import { ENV } from '@/config';
+import cors from 'cors';
 
-const PORT = 3000;
+const PORT = ENV.PORT;
 
 const app: Express = express();
+
+import router from './routes/auth.route';
 
 // Route
 
@@ -13,7 +16,13 @@ app.get('/', (req: Request, res: Response) => {
 
 // connect to DB
 
+app.use(
+  cors({
+    origin: '*',
+  })
+);
 app.use(json());
+app.use('/api/v1', router);
 
 app.listen(PORT, () => {
   console.log('listening on PORT on ' + PORT);
