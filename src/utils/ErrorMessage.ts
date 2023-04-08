@@ -1,4 +1,4 @@
-export const ErrorMessage = {
+const ErrorMessage = {
   required: {
     username: 'Username harus terisi',
     password: 'Password harus terisi',
@@ -9,3 +9,5 @@ export const ErrorMessage = {
     email: 'Email sudah terpakai',
   },
 };
+
+export default ErrorMessage;
