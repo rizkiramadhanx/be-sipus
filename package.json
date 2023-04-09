@@ -1,7 +1,7 @@
 {
   "name": "backend-skripsi",
   "version": "1.0.0",
-  "description": "this project for my thesis 🎓",
+  "description": "this project for private development",
   "main": "index.js",
   "module": "CommonJS",
   "scripts": {
@@ -10,7 +10,7 @@
     "dev": "ts-node-dev -r tsconfig-paths/register ./src/index.ts"
   },
   "author": "rizki ramadhan",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
@@ -35,5 +35,11 @@
     "tsc-alias": "^1.8.5",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.2"
-  }
+  },
+  "keywords": [
+    "express JS",
+    "prisma ORM",
+    "Boilerplate",
+    "Indonesia Developer"
+  ]
 }
