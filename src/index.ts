@@ -6,7 +6,7 @@ const PORT = ENV.PORT;
 
 const app: Express = express();
 
-import router from './routes/auth.route';
+import allRoutes from '@/routes';
 
 // Route
 
@@ -22,7 +22,7 @@ app.use(
   })
 );
 app.use(json());
-app.use('/api/v1', router);
+app.use(allRoutes);
 
 app.listen(PORT, () => {
   console.log('listening on PORT on ' + PORT);
