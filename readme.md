@@ -32,6 +32,7 @@
 ## Daftar Perintah
 
 - `yarn` - menjalankan server.
+-  ubah .env.example menjadi .env, dan sesuaikan variabel env
 - `npx prisma migrate dev` - menjalankan migrate database
 - `yarn dev` - menjalankan server pengembangan.
 - `yarn build` - untuk membuild ke folder dist.
