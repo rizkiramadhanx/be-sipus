@@ -1,15 +1,14 @@
-import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
+import { Request, Response } from "express";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 
-import { CommonResponse } from '@/types/common/Response';
-import { jwtGenerate } from '@/utils';
-import jwt from 'jsonwebtoken';
-import { ENV } from '@/config';
+import { CommonResponse } from "@/types/common/Response";
+import { jwtGenerate } from "@/utils";
+import jwt from "jsonwebtoken";
+import { ENV } from "@/config";
+import prisma from "@/libs/prismaClient";
 
 const REFRESH_TOKEN = ENV.PORT as string;
-
-const prisma = new PrismaClient();
 
 // Login
 
@@ -26,7 +25,7 @@ const Login = async (req: Request, res: Response<CommonResponse>) => {
     if (!user) {
       return res.status(400).json({
         status: 400,
-        message: 'User not found',
+        message: "User not found",
         error: null,
         data: null,
       });
@@ -36,7 +35,7 @@ const Login = async (req: Request, res: Response<CommonResponse>) => {
 
     if (!isValidUser) {
       return res.status(400).json({
-        message: 'Password incorect',
+        message: "Password incorect",
         data: null,
         error: null,
         status: 400,
@@ -50,12 +49,12 @@ const Login = async (req: Request, res: Response<CommonResponse>) => {
         ...token,
       },
       error: null,
-      message: 'You have successfully login',
+      message: "You have successfully login",
       status: 200,
     });
   } catch (error) {
     return res.status(400).json({
-      message: 'Error has found',
+      message: "Error has found",
       data: null,
       error: error,
       status: 400,
@@ -79,7 +78,7 @@ const Register = async (req: Request, res: Response<CommonResponse>) => {
       return res.status(400).json({
         data: null,
         status: 400,
-        message: 'User already exists',
+        message: "User already exists",
         error: null,
       });
     }
@@ -92,6 +91,7 @@ const Register = async (req: Request, res: Response<CommonResponse>) => {
         email: email,
         name: name,
         password: hashedPassword,
+        role: "ADMIN",
       },
     });
 
@@ -99,13 +99,13 @@ const Register = async (req: Request, res: Response<CommonResponse>) => {
       return res.status(200).json({
         data: user,
         status: 200,
-        message: 'User created successfully',
+        message: "User created successfully",
         error: null,
       });
     }
   } catch (error) {
     return res.status(400).json({
-      message: 'Error has found',
+      message: "Error has found",
       data: null,
       error: error,
       status: 400,
@@ -129,7 +129,7 @@ const Me = async (req: Request, res: Response<CommonResponse>) => {
       data: null,
       error: null,
       status: 401,
-      message: 'Error authorization',
+      message: "Error authorization",
     });
   }
 
@@ -144,10 +144,10 @@ const Me = async (req: Request, res: Response<CommonResponse>) => {
 // Refresh Token
 
 const RefreshToken = (req: Request, res: Response<CommonResponse>) => {
-  const tokenForRefresh = req.headers['authorization'] as string;
+  const tokenForRefresh = req.headers["authorization"] as string;
 
   try {
-    const decode = jwt.verify(tokenForRefresh, 'Rahasia_refresh_token');
+    const decode = jwt.verify(tokenForRefresh, "Rahasia_refresh_token");
 
     const { email }: any = decode;
 
@@ -158,12 +158,12 @@ const RefreshToken = (req: Request, res: Response<CommonResponse>) => {
         ...token,
       },
       error: null,
-      message: 'Token successfully updated',
+      message: "Token successfully updated",
       status: 200,
     });
   } catch (error) {
     return res.status(422).json({
-      message: 'invalid refresh token',
+      message: "invalid refresh token",
       data: null,
       error: error,
       status: 422,

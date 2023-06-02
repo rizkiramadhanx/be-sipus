@@ -13,23 +13,52 @@ datasource db {
 enum Role {
   ADMIN
   USER
-  CASHIER
+  EMPLOYEE
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
+  id_user  Int     @id @default(autoincrement())
   name     String?
   email    String  @unique
   password String
-  posts    Post[]
+  id_book  Book[]
   role     Role
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  published Boolean? @default(false)
-  title     String
-  content   String?
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
+model Book {
+  id_book           Int                 @id @default(autoincrement())
+  User              User?               @relation(fields: [id_book], references: [id_user])
+  title             String
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  Author            Author?
+  Language          Language[]
+  BooksOnCategories BooksOnCategories[]
+}
+
+model Category {
+  id_category       Int                 @id @default(autoincrement())
+  name              String
+  BooksOnCategories BooksOnCategories[]
+}
+
+model BooksOnCategories {
+  category_id Int
+  book_id     Int
+  Book        Book     @relation(fields: [category_id], references: [id_book])
+  Category    Category @relation(fields: [book_id], references: [id_category])
+
+  @@id([category_id, book_id])
+}
+
+model Author {
+  id_author Int    @id @default(autoincrement())
+  fullName  String
+  Book      Book   @relation(fields: [id_author], references: [id_book])
+}
+
+model Language {
+  id_language Int    @id @default(autoincrement())
+  name        String
+  Book        Book   @relation(fields: [id_language], references: [id_book])
 }
