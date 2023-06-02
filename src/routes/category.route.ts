@@ -5,21 +5,26 @@ import {
   editCategory,
   getAllCategory,
 } from "@/controllers/category.controller";
+import { verifyToken } from "@/middleware";
+import { RoleType } from "@/types/auth";
 import { Router } from "express";
 
 const router: Router = Router();
 
-/**
- * TODO : ADD MIDDLEWARE
- */
+// this variabel is ILLEGAL
+const ACCESS_CATEGORY: RoleType[] = ["ADMIN", "EMPLOYEE"];
 
-router.route("/category").get(getAllCategory);
-router.route("/category/:id").get(getCategoryById);
+router.route("/category").get(verifyToken(ACCESS_CATEGORY), getAllCategory);
+router
+  .route("/category/:id")
+  .get(verifyToken(ACCESS_CATEGORY), getCategoryById);
 
-router.route("/category").post(addCategory);
+router.route("/category").post(verifyToken(ACCESS_CATEGORY), addCategory);
 
-router.route("/category/:id").put(editCategory);
+router.route("/category/:id").put(verifyToken(ACCESS_CATEGORY), editCategory);
 
-router.route("/category/:id").delete(deleteCategory);
+router
+  .route("/category/:id")
+  .delete(verifyToken(ACCESS_CATEGORY), deleteCategory);
 
 export default router;

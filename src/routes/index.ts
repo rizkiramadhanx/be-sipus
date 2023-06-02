@@ -1,12 +1,18 @@
-import authRoute from './auth.route';
-import express, { Router } from 'express';
+import authRoute from "./auth.route";
+import categoryRoute from "./category.route";
+
+import express, { Router } from "express";
 
 const router: Router = express.Router();
 
 const routes = [
   {
-    path: '/api/v1',
+    path: "/api/v1",
     route: authRoute,
+  },
+  {
+    path: "/api/v1",
+    route: categoryRoute,
   },
 ];
 

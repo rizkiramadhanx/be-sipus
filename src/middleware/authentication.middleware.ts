@@ -9,7 +9,7 @@ import prisma from "@/libs/prismaClient";
 const ACCESS_TOKEN = ENV.ACCESS_TOKEN as string;
 
 const verifyToken =
-  (authRole: RoleType) =>
+  (authRole?: RoleType[]) =>
   (req: Request, res: Response<CommonResponse>, next: NextFunction) => {
     const authToken = req.headers["authorization"] as string;
 
@@ -40,16 +40,20 @@ const verifyToken =
         },
       });
 
-      if (user?.role !== authRole) {
-        return res.status(401).json({
-          data: null,
-          error: null,
-          status: 401,
-          message: "No access on this resource",
-        });
+      if (!authRole) {
+        return next();
       }
 
-      next();
+      if (authRole && authRole.some((record) => record === user?.role)) {
+        return next();
+      }
+
+      return res.status(401).json({
+        data: null,
+        error: null,
+        status: 401,
+        message: "No access on this resource",
+      });
     });
   };
 

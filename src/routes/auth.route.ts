@@ -12,7 +12,7 @@ const router: Router = Router();
 
 router.route("/login").post(Login);
 router.route("/register").post(validate(RegisterDTO), Register);
-router.route("/me").get(verifyToken("ADMIN"), Me);
+router.route("/me").get(verifyToken(), Me);
 router.route("/refresh-token").get(RefreshToken);
 
 export default router;
