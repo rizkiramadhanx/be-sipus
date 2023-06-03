@@ -19,9 +19,7 @@ CREATE TABLE `Book` (
     `id_author` INTEGER NOT NULL,
     `id_language` INTEGER NOT NULL,
     `id_user` INTEGER NOT NULL,
-    `authorId_author` INTEGER NULL,
 
-    UNIQUE INDEX `Book_id_language_id_user_id_author_key`(`id_language`, `id_user`, `id_author`),
     PRIMARY KEY (`id_book`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -32,14 +30,6 @@ CREATE TABLE `Category` (
 
     UNIQUE INDEX `Category_name_key`(`name`),
     PRIMARY KEY (`id_category`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `BooksOnCategories` (
-    `category_id` INTEGER NOT NULL,
-    `book_id` INTEGER NOT NULL,
-
-    PRIMARY KEY (`category_id`, `book_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -67,9 +57,3 @@ ALTER TABLE `Book` ADD CONSTRAINT `Book_id_language_fkey` FOREIGN KEY (`id_langu
 
 -- AddForeignKey
 ALTER TABLE `Book` ADD CONSTRAINT `Book_id_user_fkey` FOREIGN KEY (`id_user`) REFERENCES `User`(`id_user`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `BooksOnCategories` ADD CONSTRAINT `BooksOnCategories_category_id_fkey` FOREIGN KEY (`category_id`) REFERENCES `Book`(`id_book`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `BooksOnCategories` ADD CONSTRAINT `BooksOnCategories_book_id_fkey` FOREIGN KEY (`book_id`) REFERENCES `Category`(`id_category`) ON DELETE RESTRICT ON UPDATE CASCADE;

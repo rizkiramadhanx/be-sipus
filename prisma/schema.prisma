@@ -37,25 +37,14 @@ model Book {
   id_user     Int
   User        User      @relation(fields: [id_user], references: [id_user])
 
-  // BooksOnCategories BooksOnCategories[]
-
-  @@unique([id_language, id_user, id_author])
+  Category Category[]
 }
 
 model Category {
   id_category Int    @id @default(autoincrement())
   name        String @unique
-  // BooksOnCategories BooksOnCategories[]
+  Book        Book[]
 }
-
-// model BooksOnCategories {
-//   category_id Int
-//   book_id     Int
-//   Book        Book     @relation(fields: [category_id], references: [id_book])
-//   Category    Category @relation(fields: [book_id], references: [id_category])
-
-//   @@id([category_id, book_id])
-// }
 
 model Author {
   id_author Int    @id @default(autoincrement())

@@ -3,7 +3,8 @@ import { CommonResponse } from "@/types/common/Response";
 import { Response, Request } from "express";
 
 const addBook = async (req: Request, res: Response<CommonResponse>) => {
-  const { title, id_author, id_language } = req.body;
+  const { title, id_author, id_language, id_category, category_name } =
+    req.body;
 
   // @ts-ignore
   const email = req.id;
@@ -20,19 +21,24 @@ const addBook = async (req: Request, res: Response<CommonResponse>) => {
         title: title,
         User: {
           connect: {
-            id_user: parseInt(user!.email),
+            id_user: 2,
           },
         },
         Language: {
           connect: {
-            id_language: id_language,
+            id_language: 2,
           },
         },
         Author: {
           connect: {
-            id_author: id_author,
+            id_author: 2,
           },
         },
+      },
+      include: {
+        User: true,
+        Author: true,
+        Language: true,
       },
     });
 
