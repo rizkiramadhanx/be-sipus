@@ -1,6 +1,8 @@
 import authRoute from "./auth.route";
 import categoryRoute from "./category.route";
 import languageRoute from "./language.route";
+import authorRoute from "./author.route";
+import bookRoute from "./book.route";
 
 import express, { Router } from "express";
 
@@ -18,6 +20,14 @@ const routes = [
   {
     path: "/api/v1",
     route: languageRoute,
+  },
+  {
+    path: "/api/v1",
+    route: authorRoute,
+  },
+  {
+    path: "/api/v1",
+    route: bookRoute,
   },
 ];
 

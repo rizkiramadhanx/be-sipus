@@ -26,39 +26,45 @@ model User {
 }
 
 model Book {
-  id_book           Int                 @id @default(autoincrement())
-  User              User?               @relation(fields: [id_book], references: [id_user])
-  title             String
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  Author            Author?
-  Language          Language[]
-  BooksOnCategories BooksOnCategories[]
+  id_book     Int       @id @default(autoincrement())
+  title       String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  id_author   Int
+  Author      Author?   @relation(fields: [id_author], references: [id_author])
+  id_language Int
+  Language    Language? @relation(fields: [id_language], references: [id_language])
+  id_user     Int
+  User        User      @relation(fields: [id_user], references: [id_user])
+
+  // BooksOnCategories BooksOnCategories[]
+
+  @@unique([id_language, id_user, id_author])
 }
 
 model Category {
-  id_category       Int                 @id @default(autoincrement())
-  name              String
-  BooksOnCategories BooksOnCategories[]
+  id_category Int    @id @default(autoincrement())
+  name        String @unique
+  // BooksOnCategories BooksOnCategories[]
 }
 
-model BooksOnCategories {
-  category_id Int
-  book_id     Int
-  Book        Book     @relation(fields: [category_id], references: [id_book])
-  Category    Category @relation(fields: [book_id], references: [id_category])
+// model BooksOnCategories {
+//   category_id Int
+//   book_id     Int
+//   Book        Book     @relation(fields: [category_id], references: [id_book])
+//   Category    Category @relation(fields: [book_id], references: [id_category])
 
-  @@id([category_id, book_id])
-}
+//   @@id([category_id, book_id])
+// }
 
 model Author {
   id_author Int    @id @default(autoincrement())
   fullName  String
-  Book      Book   @relation(fields: [id_author], references: [id_book])
+  Book      Book[]
 }
 
 model Language {
   id_language Int    @id @default(autoincrement())
-  name        String
-  Book        Book   @relation(fields: [id_language], references: [id_book])
+  name        String @unique
+  Book        Book[]
 }

@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 async function main() {
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = (password: string) => bcrypt.hashSync(password, salt);
+
   await prisma.user.createMany({
     data: [
       {
@@ -27,7 +28,36 @@ async function main() {
       },
     ],
   });
+
+  await prisma.author.createMany({
+    data: [
+      {
+        fullName: "Andrea Hirata",
+      },
+      {
+        fullName: "Tere Liye",
+      },
+      {
+        fullName: "Raditya Dika",
+      },
+    ],
+  });
+
+  await prisma.language.createMany({
+    data: [
+      {
+        name: "Indonesia",
+      },
+      {
+        name: "Inggris",
+      },
+      {
+        name: "Jawa",
+      },
+    ],
+  });
 }
+
 main()
   .then(async () => {
     await prisma.$disconnect();
