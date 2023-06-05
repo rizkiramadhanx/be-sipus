@@ -25,8 +25,24 @@ model User {
   role     Role
 }
 
+model Student {
+  id_student Int    @id @default(autoincrement())
+  name       String
+  NIM        Int
+  password   String
+}
+
+model BookSpesific {
+  id_spesific_book Int     @id @default(autoincrement())
+  status           Boolean @default(false)
+  code             Int
+  id_book          Int
+  Book             Book    @relation(fields: [id_book], references: [id_book])
+}
+
 model Book {
   id_book     Int       @id @default(autoincrement())
+  code        String
   title       String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -37,7 +53,8 @@ model Book {
   id_user     Int
   User        User      @relation(fields: [id_user], references: [id_user])
 
-  Category Category[]
+  Category      Category[]
+  Book_Spesific BookSpesific[]
 }
 
 model Category {

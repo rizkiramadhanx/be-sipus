@@ -1,10 +1,16 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import bcrypt from "bcrypt";
+import { categorySeed } from "./faker/category.seed";
+import { authorSeed } from "./faker/author.seed";
 
 async function main() {
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = (password: string) => bcrypt.hashSync(password, salt);
+
+  await prisma.user.deleteMany();
+  await prisma.language.deleteMany();
+  await prisma.author.deleteMany();
 
   await prisma.user.createMany({
     data: [
@@ -29,19 +35,19 @@ async function main() {
     ],
   });
 
-  await prisma.author.createMany({
-    data: [
-      {
-        fullName: "Andrea Hirata",
-      },
-      {
-        fullName: "Tere Liye",
-      },
-      {
-        fullName: "Raditya Dika",
-      },
-    ],
-  });
+  // await prisma.author.createMany({
+  //   data: [
+  //     {
+  //       fullName: "Andrea Hirata",
+  //     },
+  //     {
+  //       fullName: "Tere Liye",
+  //     },
+  //     {
+  //       fullName: "Raditya Dika",
+  //     },
+  //   ],
+  // });
 
   await prisma.language.createMany({
     data: [
@@ -56,6 +62,9 @@ async function main() {
       },
     ],
   });
+
+  categorySeed(7);
+  authorSeed(10);
 }
 
 main()

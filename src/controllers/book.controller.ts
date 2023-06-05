@@ -1,10 +1,15 @@
 import prisma from "@/libs/prismaClient";
 import { CommonResponse } from "@/types/common/Response";
+import { generateBookCode } from "@/utils/generateCode";
 import { Response, Request } from "express";
+import { number } from "yup";
 
 const addBook = async (req: Request, res: Response<CommonResponse>) => {
-  const { title, id_author, id_language, id_category, category_name } =
-    req.body;
+  const { title, id_author, id_language } = req.body;
+
+  const array_id_category: Array<number> = req.body.array_id_category;
+
+  console.log(array_id_category, id_author, id_language);
 
   // @ts-ignore
   const email = req.id;
@@ -19,26 +24,38 @@ const addBook = async (req: Request, res: Response<CommonResponse>) => {
     const book = await prisma.book.create({
       data: {
         title: title,
+        code: await generateBookCode(),
         User: {
           connect: {
-            id_user: 2,
+            id_user: user?.id_user,
           },
         },
         Language: {
           connect: {
-            id_language: 2,
+            id_language: parseInt(id_language),
           },
         },
         Author: {
           connect: {
-            id_author: 2,
+            id_author: parseInt(id_author),
           },
+        },
+        Category: {
+          connect:
+            array_id_category.map((e: number) => ({
+              id_category: e,
+            })) || [],
         },
       },
       include: {
-        User: true,
+        User: {
+          select: {
+            name: true,
+          },
+        },
         Author: true,
         Language: true,
+        Category: true,
       },
     });
 
@@ -62,6 +79,7 @@ const addBook = async (req: Request, res: Response<CommonResponse>) => {
 
 const editBook = async (req: Request, res: Response<CommonResponse>) => {
   const { title, id_author, id_language } = req.body;
+  const array_id_category: Array<number> = req.body.array_id_category;
 
   const { id } = req.params;
 
@@ -72,8 +90,17 @@ const editBook = async (req: Request, res: Response<CommonResponse>) => {
       },
       data: {
         title: title,
-        id_language: id_language,
-        id_author: id_author,
+        id_language: parseInt(id_language),
+        id_author: parseInt(id_author),
+        Category: {
+          connect:
+            array_id_category.map((e: number) => ({
+              id_category: e,
+            })) || [],
+        },
+      },
+      include: {
+        Category: true,
       },
     });
 
@@ -105,6 +132,11 @@ const getAllBook = async (req: Request, res: Response<CommonResponse>) => {
         Author: true,
         Language: true,
         User: {
+          select: {
+            name: true,
+          },
+        },
+        Category: {
           select: {
             name: true,
           },

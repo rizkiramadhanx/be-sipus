@@ -11,15 +11,38 @@ CREATE TABLE `User` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `Student` (
+    `id_student` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `NIM` INTEGER NOT NULL,
+    `password` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id_student`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `BookSpesific` (
+    `id_spesific_book` INTEGER NOT NULL AUTO_INCREMENT,
+    `status` BOOLEAN NOT NULL DEFAULT false,
+    `code` INTEGER NOT NULL,
+    `id_book` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id_spesific_book`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Book` (
     `id_book` INTEGER NOT NULL AUTO_INCREMENT,
+    `code` VARCHAR(191) NOT NULL,
     `title` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `id_author` INTEGER NOT NULL,
     `id_language` INTEGER NOT NULL,
     `id_user` INTEGER NOT NULL,
+    `id_spesific` INTEGER NOT NULL,
 
+    UNIQUE INDEX `Book_id_spesific_key`(`id_spesific`),
     PRIMARY KEY (`id_book`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -49,6 +72,18 @@ CREATE TABLE `Language` (
     PRIMARY KEY (`id_language`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `_BookToCategory` (
+    `A` INTEGER NOT NULL,
+    `B` INTEGER NOT NULL,
+
+    UNIQUE INDEX `_BookToCategory_AB_unique`(`A`, `B`),
+    INDEX `_BookToCategory_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `BookSpesific` ADD CONSTRAINT `BookSpesific_id_book_fkey` FOREIGN KEY (`id_book`) REFERENCES `Book`(`id_spesific`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
 -- AddForeignKey
 ALTER TABLE `Book` ADD CONSTRAINT `Book_id_author_fkey` FOREIGN KEY (`id_author`) REFERENCES `Author`(`id_author`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -57,3 +92,9 @@ ALTER TABLE `Book` ADD CONSTRAINT `Book_id_language_fkey` FOREIGN KEY (`id_langu
 
 -- AddForeignKey
 ALTER TABLE `Book` ADD CONSTRAINT `Book_id_user_fkey` FOREIGN KEY (`id_user`) REFERENCES `User`(`id_user`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_BookToCategory` ADD CONSTRAINT `_BookToCategory_A_fkey` FOREIGN KEY (`A`) REFERENCES `Book`(`id_book`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `_BookToCategory` ADD CONSTRAINT `_BookToCategory_B_fkey` FOREIGN KEY (`B`) REFERENCES `Category`(`id_category`) ON DELETE CASCADE ON UPDATE CASCADE;
