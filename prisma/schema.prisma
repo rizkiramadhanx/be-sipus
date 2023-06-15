@@ -27,17 +27,17 @@ model User {
 
 model Student {
   id_student Int    @id @default(autoincrement())
-  name       String
+  fullName   String
   NIM        Int
   password   String
 }
 
-model BookSpesific {
-  id_spesific_book Int     @id @default(autoincrement())
-  status           Boolean @default(false)
-  code             Int
-  id_book          Int
-  Book             Book    @relation(fields: [id_book], references: [id_book])
+model Booking {
+  booking_id Int     @id @default(autoincrement())
+  status     Boolean @default(false)
+  code       String  @unique
+  id_book    Int
+  Book       Book    @relation(fields: [id_book], references: [id_book])
 }
 
 model Book {
@@ -53,8 +53,8 @@ model Book {
   id_user     Int
   User        User      @relation(fields: [id_user], references: [id_user])
 
-  Category      Category[]
-  Book_Spesific BookSpesific[]
+  Category Category[]
+  Booking  Booking[]
 }
 
 model Category {

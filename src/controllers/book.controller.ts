@@ -2,14 +2,11 @@ import prisma from "@/libs/prismaClient";
 import { CommonResponse } from "@/types/common/Response";
 import { generateBookCode } from "@/utils/generateCode";
 import { Response, Request } from "express";
-import { number } from "yup";
 
 const addBook = async (req: Request, res: Response<CommonResponse>) => {
   const { title, id_author, id_language } = req.body;
 
   const array_id_category: Array<number> = req.body.array_id_category;
-
-  console.log(array_id_category, id_author, id_language);
 
   // @ts-ignore
   const email = req.id;
