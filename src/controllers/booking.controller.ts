@@ -1,7 +1,7 @@
 import { Response, Request } from "express";
 import { CommonResponse } from "@/types/common/Response";
 import prisma from "@/libs/prismaClient";
-import { generateBookingCode } from "@/utils/generateCode";
+import { generateBookCode, generateBookingCode } from "@/utils/generateCode";
 
 const addBooking = async (req: Request, res: Response<CommonResponse>) => {
   const { id_book } = req.body;
@@ -34,6 +34,7 @@ const addBooking = async (req: Request, res: Response<CommonResponse>) => {
 };
 
 const getAllBooking = async (req: Request, res: Response<CommonResponse>) => {
+  await generateBookCode();
   try {
     const booking = await prisma.booking.findMany({});
 
@@ -68,7 +69,7 @@ const getBookingById = async (req: Request, res: Response<CommonResponse>) => {
   try {
     const booking = await prisma.booking.findFirst({
       where: {
-        booking_id: Number(id),
+        id_booking: Number(id),
       },
       include: {
         Book: true,
@@ -108,7 +109,7 @@ const deleteBooking = async (req: Request, res: Response<CommonResponse>) => {
   try {
     const booking = await prisma.booking.delete({
       where: {
-        booking_id: parseInt(id),
+        id_booking: parseInt(id),
       },
     });
 

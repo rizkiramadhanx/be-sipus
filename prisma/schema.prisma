@@ -26,18 +26,20 @@ model User {
 }
 
 model Student {
-  id_student Int    @id @default(autoincrement())
+  id_student Int      @id @default(autoincrement())
   fullName   String
-  NIM        Int
-  password   String
+  NIM        Int      @unique
+  phone      String
+  Borrow     Borrow[]
 }
 
 model Booking {
-  booking_id Int     @id @default(autoincrement())
+  id_booking Int     @id @default(autoincrement())
   status     Boolean @default(false)
   code       String  @unique
   id_book    Int
   Book       Book    @relation(fields: [id_book], references: [id_book])
+  Borrow     Borrow?
 }
 
 model Book {
@@ -73,4 +75,15 @@ model Language {
   id_language Int    @id @default(autoincrement())
   name        String @unique
   Book        Book[]
+}
+
+model Borrow {
+  id_borrow   Int       @id @default(autoincrement())
+  borrow_date DateTime  @default(now())
+  return_date DateTime?
+  id_booking  Int       @unique
+  id_student  Int
+
+  Student Student @relation(fields: [id_student], references: [id_student])
+  Booking Booking @relation(fields: [id_booking], references: [id_booking])
 }

@@ -13,22 +13,23 @@ CREATE TABLE `User` (
 -- CreateTable
 CREATE TABLE `Student` (
     `id_student` INTEGER NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(191) NOT NULL,
+    `fullName` VARCHAR(191) NOT NULL,
     `NIM` INTEGER NOT NULL,
-    `password` VARCHAR(191) NOT NULL,
+    `phone` VARCHAR(191) NOT NULL,
 
+    UNIQUE INDEX `Student_NIM_key`(`NIM`),
     PRIMARY KEY (`id_student`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Booking` (
-    `booking_id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_booking` INTEGER NOT NULL AUTO_INCREMENT,
     `status` BOOLEAN NOT NULL DEFAULT false,
     `code` VARCHAR(191) NOT NULL,
     `id_book` INTEGER NOT NULL,
 
     UNIQUE INDEX `Booking_code_key`(`code`),
-    PRIMARY KEY (`booking_id`)
+    PRIMARY KEY (`id_booking`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -72,6 +73,18 @@ CREATE TABLE `Language` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `Borrow` (
+    `id_borrow` INTEGER NOT NULL AUTO_INCREMENT,
+    `borrow_date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `return_date` DATETIME(3) NULL,
+    `id_booking` INTEGER NOT NULL,
+    `id_student` INTEGER NOT NULL,
+
+    UNIQUE INDEX `Borrow_id_booking_key`(`id_booking`),
+    PRIMARY KEY (`id_borrow`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `_BookToCategory` (
     `A` INTEGER NOT NULL,
     `B` INTEGER NOT NULL,
@@ -91,6 +104,12 @@ ALTER TABLE `Book` ADD CONSTRAINT `Book_id_language_fkey` FOREIGN KEY (`id_langu
 
 -- AddForeignKey
 ALTER TABLE `Book` ADD CONSTRAINT `Book_id_user_fkey` FOREIGN KEY (`id_user`) REFERENCES `User`(`id_user`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Borrow` ADD CONSTRAINT `Borrow_id_student_fkey` FOREIGN KEY (`id_student`) REFERENCES `Student`(`id_student`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Borrow` ADD CONSTRAINT `Borrow_id_booking_fkey` FOREIGN KEY (`id_booking`) REFERENCES `Booking`(`id_booking`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_BookToCategory` ADD CONSTRAINT `_BookToCategory_A_fkey` FOREIGN KEY (`A`) REFERENCES `Book`(`id_book`) ON DELETE CASCADE ON UPDATE CASCADE;

@@ -1,12 +1,16 @@
 import prisma from "@/libs/prismaClient";
 
 const generateBookCode = async () => {
-  let countAllBook = await prisma.book.count();
+  const findAllBook = await prisma.book.findMany();
 
-  if (countAllBook === 0) {
-    countAllBook = 1;
+  const intCode = findAllBook.map((book) => parseInt(book.code.slice(3)));
+
+  let biggestCode = Math.max(...intCode);
+
+  if (!findAllBook[0]) {
+    biggestCode = 0;
   }
-  const customId = `BK${String(countAllBook + 1).padStart(4, "0")}`;
+  const customId = `BK${String(biggestCode + 1).padStart(4, "0")}`;
 
   return customId;
 };

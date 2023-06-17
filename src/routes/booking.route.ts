@@ -11,7 +11,7 @@ import { Router } from "express";
 const router: Router = Router();
 
 // this variabel is ILLEGAL
-const ACCESS_BOOKING: RoleType[] = ["ADMIN", "EMPLOYEE"];
+const ACCESS_BOOKING: RoleType[] = ["ADMIN"];
 
 router.route("/booking").get(verifyToken(ACCESS_BOOKING), getAllBooking);
 router.route("/booking/:id").get(verifyToken(ACCESS_BOOKING), getBookingById);

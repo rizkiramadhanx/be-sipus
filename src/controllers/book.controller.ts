@@ -178,6 +178,7 @@ const getBookById = async (req: Request, res: Response<CommonResponse>) => {
       include: {
         Author: true,
         Language: true,
+        Category: true,
         User: {
           select: {
             name: true,

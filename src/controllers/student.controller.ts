@@ -3,14 +3,14 @@ import { CommonResponse } from "@/types/common/Response";
 import { Response, Request } from "express";
 
 const addStudent = async (req: Request, res: Response<CommonResponse>) => {
-  const { fullName, password, NIM } = req.body;
+  const { fullName, phone, NIM } = req.body;
 
   try {
     const student = await prisma.student.create({
       data: {
-        NIM: NIM,
+        NIM: parseInt(NIM),
         fullName: fullName,
-        password: password,
+        phone: phone,
       },
     });
 
@@ -33,7 +33,7 @@ const addStudent = async (req: Request, res: Response<CommonResponse>) => {
 };
 
 const editStudent = async (req: Request, res: Response<CommonResponse>) => {
-  const { fullName, password, NIM } = req.body;
+  const { fullName, phone, NIM } = req.body;
   const { id } = req.params;
 
   try {
@@ -43,8 +43,8 @@ const editStudent = async (req: Request, res: Response<CommonResponse>) => {
       },
       data: {
         fullName: fullName,
-        NIM: NIM,
-        password: password,
+        NIM: parseInt(NIM),
+        phone: phone,
       },
     });
 
@@ -99,6 +99,7 @@ const getAllStudent = async (req: Request, res: Response<CommonResponse>) => {
 
 const getStudentById = async (req: Request, res: Response<CommonResponse>) => {
   const { id } = req.params;
+
   try {
     const student = await prisma.student.findFirst({
       where: {
