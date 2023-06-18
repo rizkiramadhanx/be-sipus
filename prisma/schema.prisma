@@ -16,6 +16,12 @@ enum Role {
   EMPLOYEE
 }
 
+enum STATUS_BORROW {
+  DIKEMBALIKAN
+  DIPINJAM
+  HILANG
+}
+
 model User {
   id_user  Int     @id @default(autoincrement())
   name     String?
@@ -78,11 +84,12 @@ model Language {
 }
 
 model Borrow {
-  id_borrow   Int       @id @default(autoincrement())
-  borrow_date DateTime  @default(now())
+  id_borrow   Int           @id @default(autoincrement())
+  borrow_date DateTime      @default(now())
   return_date DateTime?
-  id_booking  Int       @unique
+  id_booking  Int           @unique
   id_student  Int
+  status      STATUS_BORROW
 
   Student Student @relation(fields: [id_student], references: [id_student])
   Booking Booking @relation(fields: [id_booking], references: [id_booking])

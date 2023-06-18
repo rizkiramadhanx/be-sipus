@@ -29,6 +29,7 @@ const addBorrow = async (req: Request, res: Response<CommonResponse>) => {
       data: {
         Borrow: {
           create: {
+            status: "DIPINJAM",
             borrow_date: new Date(Date.now()),
             Booking: {
               connect: {
@@ -72,10 +73,10 @@ const returnBorrow = async (req: Request, res: Response<CommonResponse>) => {
   const { id } = req.params;
 
   try {
-    const isValidToReturn = await prisma.booking.findFirst({
+    const isValidToReturn = await prisma.borrow.findFirst({
       where: {
         id_booking: parseInt(id_booking),
-        status: false,
+        status: "DIPINJAM",
       },
     });
 
@@ -101,6 +102,7 @@ const returnBorrow = async (req: Request, res: Response<CommonResponse>) => {
         },
         data: {
           return_date: new Date(Date.now()),
+          status: "DIKEMBALIKAN",
         },
       }),
     ]);
@@ -125,10 +127,15 @@ const getAllBorrow = async (req: Request, res: Response<CommonResponse>) => {
   try {
     const borrow = await prisma.borrow.findMany({
       include: {
-        Booking: true,
+        Booking: {
+          include: {
+            Book: true,
+          },
+        },
         Student: true,
       },
     });
+
     if (borrow) {
       return res.status(200).json({
         data: borrow,

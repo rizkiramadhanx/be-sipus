@@ -79,6 +79,7 @@ CREATE TABLE `Borrow` (
     `return_date` DATETIME(3) NULL,
     `id_booking` INTEGER NOT NULL,
     `id_student` INTEGER NOT NULL,
+    `status` ENUM('DIKEMBALIKAN', 'DIPINJAM', 'HILANG') NOT NULL,
 
     UNIQUE INDEX `Borrow_id_booking_key`(`id_booking`),
     PRIMARY KEY (`id_borrow`)

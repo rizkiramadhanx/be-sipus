@@ -34,8 +34,21 @@ const addBooking = async (req: Request, res: Response<CommonResponse>) => {
 };
 
 const getAllBooking = async (req: Request, res: Response<CommonResponse>) => {
+  const { status } = req.query;
+
+  let where = {};
+
+  if (status) {
+    where = {
+      NOT: {
+        status: status,
+      },
+    };
+  }
+
   try {
     const booking = await prisma.booking.findMany({
+      where: where,
       include: {
         Book: true,
       },
@@ -124,7 +137,6 @@ const deleteBooking = async (req: Request, res: Response<CommonResponse>) => {
         status: 200,
       });
     }
-
     if (!booking) {
       return res.status(400).json({
         data: booking,
