@@ -34,12 +34,12 @@ model Student {
 }
 
 model Booking {
-  id_booking Int     @id @default(autoincrement())
-  status     Boolean @default(false)
-  code       String  @unique
+  id_booking Int      @id @default(autoincrement())
+  status     Boolean  @default(false)
+  code       String   @unique
   id_book    Int
-  Book       Book    @relation(fields: [id_book], references: [id_book])
-  Borrow     Borrow?
+  Book       Book     @relation(fields: [id_book], references: [id_book])
+  Borrow     Borrow[]
 }
 
 model Book {

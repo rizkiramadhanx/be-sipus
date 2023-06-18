@@ -5,18 +5,34 @@ import prisma from "@/libs/prismaClient";
 const addBorrow = async (req: Request, res: Response<CommonResponse>) => {
   const { id_student, id_booking } = req.body;
 
+  const isBorrowBooking = await prisma.booking.findFirst({
+    where: {
+      id_booking: parseInt(id_booking),
+      status: true,
+    },
+  });
+
+  if (isBorrowBooking) {
+    return res.status(400).json({
+      message: "Has borrow",
+      data: null,
+      error: true,
+      status: 400,
+    });
+  }
+
   try {
     const addBorrowOnstudent = await prisma.student.update({
       where: {
-        id_student: 5,
+        id_student: parseInt(id_student),
       },
       data: {
         Borrow: {
           create: {
-            borrow_date: new Date(1686803959),
+            borrow_date: new Date(Date.now()),
             Booking: {
               connect: {
-                id_booking: 2,
+                id_booking: parseInt(id_booking),
               },
             },
           },
@@ -27,7 +43,7 @@ const addBorrow = async (req: Request, res: Response<CommonResponse>) => {
     if (addBorrowOnstudent) {
       await prisma.booking.update({
         where: {
-          id_booking: 2,
+          id_booking: parseInt(id_booking),
         },
         data: {
           status: true,
@@ -51,7 +67,59 @@ const addBorrow = async (req: Request, res: Response<CommonResponse>) => {
   }
 };
 
-const editBorrow = async (req: Request, res: Response<CommonResponse>) => {};
+const returnBorrow = async (req: Request, res: Response<CommonResponse>) => {
+  const { id_booking } = req.body;
+  const { id } = req.params;
+
+  try {
+    const isValidToReturn = await prisma.booking.findFirst({
+      where: {
+        id_booking: parseInt(id_booking),
+        status: false,
+      },
+    });
+
+    if (isValidToReturn) {
+      return res.status(400).json({
+        message: "Book not yet borrow",
+        data: null,
+        error: true,
+        status: 400,
+      });
+    }
+
+    const result = await prisma.$transaction([
+      prisma.booking.update({
+        where: { id_booking: parseInt(id_booking) },
+        data: {
+          status: false,
+        },
+      }),
+      prisma.borrow.update({
+        where: {
+          id_borrow: parseInt(id),
+        },
+        data: {
+          return_date: new Date(Date.now()),
+        },
+      }),
+    ]);
+
+    return res.status(200).json({
+      data: result,
+      error: null,
+      message: "Return book is updated",
+      status: 200,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: "Error has found",
+      data: null,
+      error: error,
+      status: 400,
+    });
+  }
+};
 
 const getAllBorrow = async (req: Request, res: Response<CommonResponse>) => {
   try {
@@ -88,4 +156,4 @@ const getAllBorrow = async (req: Request, res: Response<CommonResponse>) => {
   }
 };
 
-export { addBorrow, editBorrow, getAllBorrow };
+export { addBorrow, returnBorrow, getAllBorrow };

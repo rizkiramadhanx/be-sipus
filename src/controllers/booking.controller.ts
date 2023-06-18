@@ -4,13 +4,13 @@ import prisma from "@/libs/prismaClient";
 import { generateBookCode, generateBookingCode } from "@/utils/generateCode";
 
 const addBooking = async (req: Request, res: Response<CommonResponse>) => {
-  const { id_book } = req.body;
+  const { id_book, code } = req.body;
 
   try {
     const booking = await prisma.booking.create({
       data: {
         status: false,
-        code: await generateBookingCode(),
+        code: code || (await generateBookingCode()),
         id_book: id_book,
       },
     });
@@ -34,9 +34,12 @@ const addBooking = async (req: Request, res: Response<CommonResponse>) => {
 };
 
 const getAllBooking = async (req: Request, res: Response<CommonResponse>) => {
-  await generateBookCode();
   try {
-    const booking = await prisma.booking.findMany({});
+    const booking = await prisma.booking.findMany({
+      include: {
+        Book: true,
+      },
+    });
 
     if (booking) {
       return res.status(200).json({
@@ -140,4 +143,44 @@ const deleteBooking = async (req: Request, res: Response<CommonResponse>) => {
   }
 };
 
-export { addBooking, getAllBooking, getBookingById, deleteBooking };
+const editBooking = async (req: Request, res: Response<CommonResponse>) => {
+  const { id_book, code } = req.body;
+
+  const { id } = req.params;
+
+  try {
+    const booking = await prisma.booking.update({
+      where: {
+        id_booking: parseInt(id),
+      },
+      data: {
+        code: code,
+        id_book: parseInt(id_book),
+      },
+    });
+
+    if (booking) {
+      return res.status(200).json({
+        data: booking,
+        error: null,
+        message: "Data has been update",
+        status: 200,
+      });
+    }
+  } catch (error) {
+    return res.status(400).json({
+      message: "Error has found",
+      data: null,
+      error: error,
+      status: 400,
+    });
+  }
+};
+
+export {
+  addBooking,
+  getAllBooking,
+  getBookingById,
+  deleteBooking,
+  editBooking,
+};

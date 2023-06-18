@@ -3,6 +3,7 @@ import {
   deleteBooking,
   getAllBooking,
   getBookingById,
+  editBooking,
 } from "@/controllers/booking.controller";
 import { verifyToken } from "@/middleware";
 import { RoleType } from "@/types/auth";
@@ -16,7 +17,7 @@ const ACCESS_BOOKING: RoleType[] = ["ADMIN"];
 router.route("/booking").get(verifyToken(ACCESS_BOOKING), getAllBooking);
 router.route("/booking/:id").get(verifyToken(ACCESS_BOOKING), getBookingById);
 router.route("/booking").post(verifyToken(ACCESS_BOOKING), addBooking);
-// router.route("/booking/:id").put(verifyToken(ACCESS_BOOKING), editBook);
+router.route("/booking/:id").put(verifyToken(ACCESS_BOOKING), editBooking);
 router.route("/booking/:id").delete(verifyToken(ACCESS_BOOKING), deleteBooking);
 
 export default router;
