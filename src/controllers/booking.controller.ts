@@ -3,6 +3,12 @@ import { CommonResponse } from "@/types/common/Response";
 import prisma from "@/libs/prismaClient";
 import { generateBookCode, generateBookingCode } from "@/utils/generateCode";
 
+interface getAllBookingRequest {
+  per_page: number;
+  current_page: number;
+  status: boolean;
+}
+
 const addBooking = async (req: Request, res: Response<CommonResponse>) => {
   const { id_book, code } = req.body;
 
@@ -33,7 +39,19 @@ const addBooking = async (req: Request, res: Response<CommonResponse>) => {
   }
 };
 
-const getAllBooking = async (req: Request, res: Response<CommonResponse>) => {
+const getAllBooking = async (
+  req: Request<{}, {}, {}, getAllBookingRequest>,
+  res: Response<CommonResponse>
+) => {
+  const { per_page = 10, current_page = 1 } = req.query;
+
+  const per_pageToNumber = Number(per_page);
+  const current_pageToNumber = Number(current_page);
+
+  if (isNaN(per_pageToNumber) || isNaN(current_pageToNumber)) {
+    new Error();
+  }
+
   const { status } = req.query;
 
   let where = {};
@@ -47,7 +65,11 @@ const getAllBooking = async (req: Request, res: Response<CommonResponse>) => {
   }
 
   try {
+    const countBooking = await prisma.booking.count();
+
     const booking = await prisma.booking.findMany({
+      skip: per_pageToNumber * (current_pageToNumber - 1),
+      take: per_pageToNumber,
       where: where,
       include: {
         Book: true,
@@ -65,7 +87,14 @@ const getAllBooking = async (req: Request, res: Response<CommonResponse>) => {
 
     if (!booking) {
       return res.status(200).json({
-        data: booking,
+        data: {
+          pagination: {
+            rows: countBooking,
+            per_page: current_pageToNumber,
+            current_page: per_pageToNumber,
+          },
+          record: booking,
+        },
         error: null,
         message: "Data not found",
         status: 200,

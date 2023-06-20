@@ -2,6 +2,11 @@ import prisma from "@/libs/prismaClient";
 import { CommonResponse } from "@/types/common/Response";
 import { Response, Request } from "express";
 
+interface getAllStudentRequest {
+  per_page: number;
+  current_page: number;
+}
+
 const addStudent = async (req: Request, res: Response<CommonResponse>) => {
   const { fullName, phone, NIM } = req.body;
 
@@ -66,8 +71,21 @@ const editStudent = async (req: Request, res: Response<CommonResponse>) => {
   }
 };
 
-const getAllStudent = async (req: Request, res: Response<CommonResponse>) => {
+const getAllStudent = async (
+  req: Request<{}, {}, {}, getAllStudentRequest>,
+  res: Response<CommonResponse>
+) => {
+  const { per_page = 10, current_page = 1 } = req.query;
+
+  const per_pageToNumber = Number(per_page);
+  const current_pageToNumber = Number(current_page);
+
+  if (isNaN(per_pageToNumber) || isNaN(current_pageToNumber)) {
+    new Error();
+  }
+
   try {
+    const countStudent = await prisma.student.count();
     const student = await prisma.student.findMany({});
 
     if (student) {
@@ -81,7 +99,14 @@ const getAllStudent = async (req: Request, res: Response<CommonResponse>) => {
 
     if (!student) {
       return res.status(200).json({
-        data: student,
+        data: {
+          pagination: {
+            rows: countStudent,
+            per_page: current_pageToNumber,
+            current_page: per_pageToNumber,
+          },
+          record: student,
+        },
         error: null,
         message: "Data not found",
         status: 200,

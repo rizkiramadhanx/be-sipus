@@ -2,6 +2,11 @@ import { Response, Request } from "express";
 import { CommonResponse } from "@/types/common/Response";
 import prisma from "@/libs/prismaClient";
 
+interface getAllBorrowRequest {
+  per_page: number;
+  current_page: number;
+}
+
 const addBorrow = async (req: Request, res: Response<CommonResponse>) => {
   const { id_student, id_booking } = req.body;
 
@@ -123,9 +128,23 @@ const returnBorrow = async (req: Request, res: Response<CommonResponse>) => {
   }
 };
 
-const getAllBorrow = async (req: Request, res: Response<CommonResponse>) => {
+const getAllBorrow = async (
+  req: Request<{}, {}, {}, getAllBorrowRequest>,
+  res: Response<CommonResponse>
+) => {
+  const { per_page = 10, current_page = 1 } = req.query;
+
+  const per_pageToNumber = Number(per_page);
+  const current_pageToNumber = Number(current_page);
+
+  if (isNaN(per_pageToNumber) || isNaN(current_pageToNumber)) {
+    new Error();
+  }
   try {
+    const countBorrrow = await prisma.borrow.count();
     const borrow = await prisma.borrow.findMany({
+      skip: per_pageToNumber * (current_pageToNumber - 1),
+      take: per_pageToNumber,
       include: {
         Booking: {
           include: {
@@ -147,7 +166,14 @@ const getAllBorrow = async (req: Request, res: Response<CommonResponse>) => {
 
     if (!borrow[0]) {
       return res.status(200).json({
-        data: borrow,
+        data: {
+          pagination: {
+            rows: countBorrrow,
+            per_page: current_pageToNumber,
+            current_page: per_pageToNumber,
+          },
+          record: borrow,
+        },
         error: null,
         message: "Data not found",
         status: 200,

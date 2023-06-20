@@ -2,6 +2,11 @@ import prisma from "@/libs/prismaClient";
 import { CommonResponse } from "@/types/common/Response";
 import { Response, Request } from "express";
 
+interface getAllLanguageRequest {
+  per_page: number;
+  current_page: number;
+}
+
 const addLanguage = async (req: Request, res: Response<CommonResponse>) => {
   const { name } = req.body;
 
@@ -62,11 +67,21 @@ const editLanguage = async (req: Request, res: Response<CommonResponse>) => {
   }
 };
 
-const getAllLanguage = async (req: Request, res: Response<CommonResponse>) => {
-  // add pagination
-  // query search, sort by date
+const getAllLanguage = async (
+  req: Request<{}, {}, {}, getAllLanguageRequest>,
+  res: Response<CommonResponse>
+) => {
+  const { per_page = 10, current_page = 1 } = req.query;
+
+  const per_pageToNumber = Number(per_page);
+  const current_pageToNumber = Number(current_page);
+
+  if (isNaN(per_pageToNumber) || isNaN(current_pageToNumber)) {
+    new Error();
+  }
 
   try {
+    const countLanguage = await prisma.category.count();
     const language = await prisma.language.findMany({});
 
     if (language) {
@@ -80,7 +95,14 @@ const getAllLanguage = async (req: Request, res: Response<CommonResponse>) => {
 
     if (!language) {
       return res.status(200).json({
-        data: language,
+        data: {
+          pagination: {
+            rows: countLanguage,
+            per_page: current_pageToNumber,
+            current_page: per_pageToNumber,
+          },
+          record: language,
+        },
         error: null,
         message: "Data not found",
         status: 200,

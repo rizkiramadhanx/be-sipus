@@ -2,6 +2,11 @@ import prisma from "@/libs/prismaClient";
 import { CommonResponse } from "@/types/common/Response";
 import { Response, Request } from "express";
 
+interface getAllCategoryRequest {
+  per_page: number;
+  current_page: number;
+}
+
 const addCategory = async (req: Request, res: Response<CommonResponse>) => {
   const { name } = req.body;
 
@@ -62,12 +67,25 @@ const editCategory = async (req: Request, res: Response<CommonResponse>) => {
   }
 };
 
-const getAllCategory = async (req: Request, res: Response<CommonResponse>) => {
-  // add pagination
-  // query search, sort by date
+const getAllCategory = async (
+  req: Request<{}, {}, {}, getAllCategoryRequest>,
+  res: Response<CommonResponse>
+) => {
+  const { per_page = 10, current_page = 1 } = req.query;
+
+  const per_pageToNumber = Number(per_page);
+  const current_pageToNumber = Number(current_page);
+
+  if (isNaN(per_pageToNumber) || isNaN(current_pageToNumber)) {
+    new Error();
+  }
 
   try {
-    const category = await prisma.category.findMany({});
+    const countCategory = await prisma.category.count();
+    const category = await prisma.category.findMany({
+      skip: per_pageToNumber * (current_pageToNumber - 1),
+      take: per_pageToNumber,
+    });
 
     if (category) {
       return res.status(200).json({
@@ -80,7 +98,14 @@ const getAllCategory = async (req: Request, res: Response<CommonResponse>) => {
 
     if (!category) {
       return res.status(200).json({
-        data: category,
+        data: {
+          pagination: {
+            rows: countCategory,
+            per_page: current_pageToNumber,
+            current_page: per_pageToNumber,
+          },
+          record: category,
+        },
         error: null,
         message: "Data not found",
         status: 200,

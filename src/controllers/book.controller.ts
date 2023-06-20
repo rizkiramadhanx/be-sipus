@@ -3,6 +3,11 @@ import { CommonResponse } from "@/types/common/Response";
 import { generateBookCode } from "@/utils/generateCode";
 import { Response, Request } from "express";
 
+interface getAllBookRequest {
+  per_page: number;
+  current_page: number;
+}
+
 const addBook = async (req: Request, res: Response<CommonResponse>) => {
   const { title, id_author, id_language } = req.body;
 
@@ -119,12 +124,24 @@ const editBook = async (req: Request, res: Response<CommonResponse>) => {
   }
 };
 
-const getAllBook = async (req: Request, res: Response<CommonResponse>) => {
-  // add pagination
-  // query search, sort by date
+const getAllBook = async (
+  req: Request<{}, {}, {}, getAllBookRequest>,
+  res: Response<CommonResponse>
+) => {
+  const { per_page = 10, current_page = 1 } = req.query;
+
+  const per_pageToNumber = Number(per_page);
+  const current_pageToNumber = Number(current_page);
+
+  if (isNaN(per_pageToNumber) || isNaN(current_pageToNumber)) {
+    new Error();
+  }
 
   try {
+    const countBook = await prisma.book.count();
     const book = await prisma.book.findMany({
+      skip: per_pageToNumber * (current_pageToNumber - 1),
+      take: per_pageToNumber,
       include: {
         Author: true,
         Language: true,
@@ -143,7 +160,14 @@ const getAllBook = async (req: Request, res: Response<CommonResponse>) => {
 
     if (book) {
       return res.status(200).json({
-        data: book,
+        data: {
+          pagination: {
+            rows: countBook,
+            per_page: current_pageToNumber,
+            current_page: per_pageToNumber,
+          },
+          record: book,
+        },
         error: null,
         message: "Data found",
         status: 200,

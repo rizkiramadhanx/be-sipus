@@ -10,7 +10,11 @@ const ACCESS_TOKEN = ENV.ACCESS_TOKEN as string;
 
 const verifyToken =
   (authRole?: RoleType[]) =>
-  (req: Request, res: Response<CommonResponse>, next: NextFunction) => {
+  (
+    req: Request<{}, {}, {}, any>,
+    res: Response<CommonResponse>,
+    next: NextFunction
+  ) => {
     const authToken = req.headers["authorization"] as string;
 
     if (authToken === null) {
