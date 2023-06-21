@@ -78,15 +78,6 @@ const getAllBooking = async (
 
     if (booking) {
       return res.status(200).json({
-        data: booking,
-        error: null,
-        message: "Data found",
-        status: 200,
-      });
-    }
-
-    if (!booking) {
-      return res.status(200).json({
         data: {
           pagination: {
             rows: countBooking,
@@ -95,6 +86,15 @@ const getAllBooking = async (
           },
           record: booking,
         },
+        error: null,
+        message: "Data found",
+        status: 200,
+      });
+    }
+
+    if (!booking) {
+      return res.status(200).json({
+        data: booking,
         error: null,
         message: "Data not found",
         status: 200,

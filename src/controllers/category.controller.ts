@@ -89,15 +89,6 @@ const getAllCategory = async (
 
     if (category) {
       return res.status(200).json({
-        data: category,
-        error: null,
-        message: "Data found",
-        status: 200,
-      });
-    }
-
-    if (!category) {
-      return res.status(200).json({
         data: {
           pagination: {
             rows: countCategory,
@@ -106,6 +97,15 @@ const getAllCategory = async (
           },
           record: category,
         },
+        error: null,
+        message: "Data found",
+        status: 200,
+      });
+    }
+
+    if (!category) {
+      return res.status(200).json({
+        data: category,
         error: null,
         message: "Data not found",
         status: 200,

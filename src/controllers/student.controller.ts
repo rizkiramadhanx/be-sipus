@@ -90,15 +90,6 @@ const getAllStudent = async (
 
     if (student) {
       return res.status(200).json({
-        data: student,
-        error: null,
-        message: "Data found",
-        status: 200,
-      });
-    }
-
-    if (!student) {
-      return res.status(200).json({
         data: {
           pagination: {
             rows: countStudent,
@@ -107,6 +98,15 @@ const getAllStudent = async (
           },
           record: student,
         },
+        error: null,
+        message: "Data found",
+        status: 200,
+      });
+    }
+
+    if (!student) {
+      return res.status(200).json({
+        data: student,
         error: null,
         message: "Data not found",
         status: 200,
