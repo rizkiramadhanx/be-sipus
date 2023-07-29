@@ -86,15 +86,6 @@ const getAllLanguage = async (
 
     if (language) {
       return res.status(200).json({
-        data: language,
-        error: null,
-        message: "Data found",
-        status: 200,
-      });
-    }
-
-    if (!language) {
-      return res.status(200).json({
         data: {
           pagination: {
             rows: countLanguage,
@@ -103,6 +94,15 @@ const getAllLanguage = async (
           },
           record: language,
         },
+        error: null,
+        message: "Data found",
+        status: 200,
+      });
+    }
+
+    if (!language) {
+      return res.status(200).json({
+        data: language,
         error: null,
         message: "Data not found",
         status: 200,

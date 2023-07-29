@@ -89,15 +89,6 @@ const getAllAuthor = async (
 
     if (author) {
       return res.status(200).json({
-        data: author,
-        error: null,
-        message: "Data found",
-        status: 200,
-      });
-    }
-
-    if (!author) {
-      return res.status(200).json({
         data: {
           pagination: {
             rows: countAuthor,
@@ -106,6 +97,15 @@ const getAllAuthor = async (
           },
           record: author,
         },
+        error: null,
+        message: "Data found",
+        status: 200,
+      });
+    }
+
+    if (!author) {
+      return res.status(200).json({
+        data: author,
         error: null,
         message: "Data not found",
         status: 200,
