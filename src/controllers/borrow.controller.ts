@@ -157,15 +157,6 @@ const getAllBorrow = async (
 
     if (borrow) {
       return res.status(200).json({
-        data: borrow,
-        error: null,
-        message: "Data found",
-        status: 200,
-      });
-    }
-
-    if (!borrow[0]) {
-      return res.status(200).json({
         data: {
           pagination: {
             rows: countBorrrow,
@@ -174,6 +165,15 @@ const getAllBorrow = async (
           },
           record: borrow,
         },
+        error: null,
+        message: "Data found",
+        status: 200,
+      });
+    }
+
+    if (!borrow[0]) {
+      return res.status(200).json({
+        data: null,
         error: null,
         message: "Data not found",
         status: 200,
