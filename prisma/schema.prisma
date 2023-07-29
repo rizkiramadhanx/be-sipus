@@ -10,19 +10,87 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int     @default(autoincrement()) @id
-  name  String?
-  email String  @unique
-  password String
-  posts Post[]
+enum Role {
+  ADMIN
+  USER
+  EMPLOYEE
 }
 
-model Post {
-  id        Int      @default(autoincrement()) @id
-  published Boolean? @default(false)
-  title     String
-  content   String?
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int? 
+enum STATUS_BORROW {
+  DIKEMBALIKAN
+  DIPINJAM
+  HILANG
+}
+
+model User {
+  id_user  Int     @id @default(autoincrement())
+  name     String?
+  email    String  @unique
+  password String
+  id_book  Book[]
+  role     Role
+}
+
+model Student {
+  id_student Int      @id @default(autoincrement())
+  fullName   String
+  NIM        Int      @unique
+  phone      String
+  Borrow     Borrow[]
+}
+
+model Booking {
+  id_booking Int      @id @default(autoincrement())
+  status     Boolean  @default(false)
+  code       String   @unique
+  id_book    Int
+  Book       Book     @relation(fields: [id_book], references: [id_book])
+  Borrow     Borrow[]
+}
+
+model Book {
+  id_book     Int       @id @default(autoincrement())
+  code        String
+  title       String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  id_author   Int
+  Author      Author?   @relation(fields: [id_author], references: [id_author])
+  id_language Int
+  Language    Language? @relation(fields: [id_language], references: [id_language])
+  id_user     Int
+  User        User      @relation(fields: [id_user], references: [id_user])
+
+  Category Category[]
+  Booking  Booking[]
+}
+
+model Category {
+  id_category Int    @id @default(autoincrement())
+  name        String @unique
+  Book        Book[]
+}
+
+model Author {
+  id_author Int    @id @default(autoincrement())
+  fullName  String
+  Book      Book[]
+}
+
+model Language {
+  id_language Int    @id @default(autoincrement())
+  name        String @unique
+  Book        Book[]
+}
+
+model Borrow {
+  id_borrow   Int           @id @default(autoincrement())
+  borrow_date DateTime      @default(now())
+  return_date DateTime?
+  id_booking  Int           @unique
+  id_student  Int
+  status      STATUS_BORROW
+
+  Student Student @relation(fields: [id_student], references: [id_student])
+  Booking Booking @relation(fields: [id_booking], references: [id_booking])
 }
