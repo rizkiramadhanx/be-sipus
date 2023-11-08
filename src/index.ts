@@ -9,12 +9,19 @@ const app: Express = express();
 import allRoutes from "./routes";
 
 // Route
+
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello world 🌏");
 });
 
 // connect to DB
-app.use(cors());
+
+app.use(
+  cors({
+    origin: "https://fe-sipus.vercel.app/",
+  })
+);
+
 
 app.use(json());
 app.use(allRoutes);
