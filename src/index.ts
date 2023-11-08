@@ -19,6 +19,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use(
   cors({
     origin: "https://fe-sipus.vercel.app/",
+    methods: ["GET","POST","PUT","DELETE","PATCH"]
   })
 );
 
