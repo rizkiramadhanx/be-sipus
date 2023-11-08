@@ -1,7 +1,8 @@
 import { Response, Request } from "express";
-import { CommonResponse } from "@/types/common/Response";
-import prisma from "@/libs/prismaClient";
-import { generateBookCode, generateBookingCode } from "@/utils/generateCode";
+import { CommonResponse } from "../types/common/Response";
+import prisma from "../libs/prismaClient";
+import { generateBookingCode } from "../utils/generateCode";
+
 
 interface getAllBookingRequest {
   per_page: number;

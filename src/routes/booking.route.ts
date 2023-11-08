@@ -1,13 +1,8 @@
-import {
-  addBooking,
-  deleteBooking,
-  getAllBooking,
-  getBookingById,
-  editBooking,
-} from "@/controllers/booking.controller";
-import { verifyToken } from "@/middleware";
-import { RoleType } from "@/types/auth";
+
 import { Router } from "express";
+import { RoleType } from "../types/auth";
+import { verifyToken } from "../middleware";
+import { addBooking, deleteBooking, editBooking, getAllBooking, getBookingById } from "../controllers/booking.controller";
 
 const router: Router = Router();
 

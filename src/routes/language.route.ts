@@ -1,13 +1,8 @@
-import {
-  getLanguageById,
-  addLanguage,
-  deleteLanguage,
-  editLanguage,
-  getAllLanguage,
-} from "@/controllers/language.controller";
-import { verifyToken } from "@/middleware";
-import { RoleType } from "@/types/auth";
+
 import { Router } from "express";
+import { RoleType } from "../types/auth";
+import { verifyToken } from "../middleware";
+import { addLanguage, deleteLanguage, editLanguage, getAllLanguage, getLanguageById } from "../controllers/language.controller";
 
 const router: Router = Router();
 

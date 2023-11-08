@@ -1,13 +1,8 @@
-import {
-  addStudent,
-  deleteStudent,
-  editStudent,
-  getAllStudent,
-  getStudentById,
-} from "@/controllers/student.controller";
-import { verifyToken } from "@/middleware";
-import { RoleType } from "@/types/auth";
+
 import { Router } from "express";
+import { verifyToken } from "../middleware";
+import { addStudent, deleteStudent, editStudent, getAllStudent, getStudentById } from "../controllers/student.controller";
+import { RoleType } from "../types/auth";
 
 const router: Router = Router();
 

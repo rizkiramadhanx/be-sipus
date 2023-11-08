@@ -1,13 +1,8 @@
-import {
-  getCategoryById,
-  addCategory,
-  deleteCategory,
-  editCategory,
-  getAllCategory,
-} from "@/controllers/category.controller";
-import { verifyToken } from "@/middleware";
-import { RoleType } from "@/types/auth";
+
 import { Router } from "express";
+import { RoleType } from "../types/auth";
+import { verifyToken } from "../middleware";
+import { addCategory, deleteCategory, editCategory, getAllCategory, getCategoryById } from "../controllers/category.controller";
 
 const router: Router = Router();
 

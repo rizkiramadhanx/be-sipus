@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from 'express';
-import { ValidationError, AnyObject } from 'yup';
+import { NextFunction, Request, Response } from "express";
+import { ValidationError, AnyObject } from "yup";
 
 const validate =
   (schema: AnyObject) =>
@@ -21,9 +21,9 @@ const validate =
         status: 400,
         data: null,
         error: errorValidation.errors,
-        message: 'Data Not valid',
+        message: "Data Not valid",
       });
     }
   };
 
-export default validate;
+export  { validate };

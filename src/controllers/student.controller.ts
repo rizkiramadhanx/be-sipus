@@ -1,6 +1,6 @@
-import prisma from "@/libs/prismaClient";
-import { CommonResponse } from "@/types/common/Response";
 import { Response, Request } from "express";
+import { CommonResponse } from "../types/common/Response";
+import prisma from "../libs/prismaClient";
 
 interface getAllStudentRequest {
   per_page: number;
