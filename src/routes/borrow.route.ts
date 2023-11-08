@@ -1,11 +1,8 @@
-import {
-  addBorrow,
-  getAllBorrow,
-  returnBorrow,
-} from "@/controllers/borrow.controller";
-import { verifyToken } from "@/middleware";
-import { RoleType } from "@/types/auth";
+
 import { Router } from "express";
+import { RoleType } from "../types/auth";
+import { verifyToken } from "../middleware";
+import { addBorrow, getAllBorrow, returnBorrow } from "../controllers/borrow.controller";
 
 const router: Router = Router();
 

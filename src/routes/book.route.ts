@@ -1,13 +1,8 @@
-import {
-  getBookById,
-  addBook,
-  deleteBook,
-  editBook,
-  getAllBook,
-} from "@/controllers/book.controller";
-import { verifyToken } from "@/middleware";
-import { RoleType } from "@/types/auth";
+
 import { Router } from "express";
+import { verifyToken } from "../middleware";
+import { addBook, deleteBook, editBook, getAllBook, getBookById } from "../controllers/book.controller";
+import { RoleType } from "../types/auth";
 
 const router: Router = Router();
 

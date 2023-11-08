@@ -1,12 +1,12 @@
 import express, { Express, Request, Response, json } from 'express';
-import { ENV } from '@/config';
+import { ENV } from './config';
 import cors from 'cors';
 
 const PORT = ENV.PORT;
 
 const app: Express = express();
 
-import allRoutes from '@/routes';
+import allRoutes from './routes';
 
 // Route
 

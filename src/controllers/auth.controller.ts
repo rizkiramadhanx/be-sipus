@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
-
-import { CommonResponse } from "@/types/common/Response";
-import { jwtGenerate } from "@/utils";
 import jwt from "jsonwebtoken";
-import { ENV } from "@/config";
-import prisma from "@/libs/prismaClient";
+
+import bcrypt from "bcrypt";
+import { ENV } from "../config";
+import { CommonResponse } from "../types/common/Response";
+import prisma from "../libs/prismaClient";
+import { jwtGenerate } from "../utils";
 
 const REFRESH_TOKEN = ENV.PORT as string;
 

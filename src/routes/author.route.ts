@@ -1,13 +1,8 @@
-import {
-  getAuthorById,
-  addAuthor,
-  deleteAuthor,
-  editAuthor,
-  getAllAuthor,
-} from "@/controllers/author.controller";
-import { verifyToken } from "@/middleware";
-import { RoleType } from "@/types/auth";
+
 import { Router } from "express";
+import { verifyToken } from "../middleware";
+import { addAuthor, deleteAuthor, editAuthor, getAllAuthor, getAuthorById } from "../controllers/author.controller";
+import { RoleType } from "../types/auth";
 
 const router: Router = Router();
 
