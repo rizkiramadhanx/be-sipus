@@ -9,16 +9,14 @@ const app: Express = express();
 import allRoutes from "./routes";
 
 // Route
-
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello world 🌏");
 });
 
 // connect to DB
-
 app.use(
   cors({
-    origin: "*",
+    origin: ["http://localhost:5137"],
   })
 );
 
