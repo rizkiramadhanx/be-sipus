@@ -1,7 +1,7 @@
-import prisma from "@/libs/prismaClient";
-import { CommonResponse } from "@/types/common/Response";
-import { generateBookCode } from "@/utils/generateCode";
 import { Response, Request } from "express";
+import { CommonResponse } from "../types/common/Response";
+import prisma from "../libs/prismaClient";
+import { generateBookCode } from "../utils/generateCode";
 
 interface getAllBookRequest {
   per_page: number;

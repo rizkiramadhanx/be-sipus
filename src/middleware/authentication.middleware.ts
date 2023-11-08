@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { CommonResponse } from "@/types/common/Response";
 
 import jwt from "jsonwebtoken";
-import { ENV } from "@/config";
-import { RoleType } from "@/types/auth";
-import prisma from "@/libs/prismaClient";
+import { ENV } from "../config";
+import { RoleType } from "../types/auth";
+import { CommonResponse } from "../types/common/Response";
+import prisma from "../libs/prismaClient";
+
 
 const ACCESS_TOKEN = ENV.ACCESS_TOKEN as string;
 

@@ -1,12 +1,8 @@
 import { Router } from "express";
-import { validate, verifyToken } from "@/middleware";
-import { LoginDTO, RegisterDTO } from "@/types/auth/schemaDTO";
-import {
-  Login,
-  Me,
-  RefreshToken,
-  Register,
-} from "@/controllers/auth.controller";
+import { Login, Me, RefreshToken, Register } from "../controllers/auth.controller";
+import { validate, verifyToken } from "../middleware";
+import { RegisterDTO } from "../types/auth/schemaDTO";
+
 
 const router: Router = Router();
 

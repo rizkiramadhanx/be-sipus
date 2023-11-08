@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { ENV } from "@/config";
+import { ENV } from "../config";
 
 const ACCESS_TOKEN = ENV.ACCESS_TOKEN as string;
 const REFRESH_TOKEN = ENV.REFRESH_TOKEN as string;
