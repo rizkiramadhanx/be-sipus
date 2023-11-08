@@ -14,12 +14,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // connect to DB
-app.use(
-  cors({
-    origin: ["http://localhost:5137"],
-  })
-);
-
+app.use(cors());
 
 app.use(json());
 app.use(allRoutes);
