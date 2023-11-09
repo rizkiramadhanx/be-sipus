@@ -19,7 +19,6 @@ app.get("/", (req: Request, res: Response) => {
 app.use(
   cors({
     origin: "*",
-    methods: ["GET","POST","PUT","DELETE","PATCH"]
   })
 );
 
